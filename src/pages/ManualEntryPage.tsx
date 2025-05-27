@@ -134,7 +134,7 @@ export function ManualEntryPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold text-indigo-900">Manual Question Entry</h1>
         <p className="text-gray-600 mt-2">
@@ -142,27 +142,27 @@ export function ManualEntryPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-800 flex items-center">
-              <FileText className="h-5 w-5 mr-2 text-indigo-600" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+              <FileText className="h-6 w-6 mr-2 text-indigo-600" />
               Question Input
             </h2>
 
-            <div className="flex space-x-2">
+            <div className="flex space-x-3">
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-md flex items-center hover:bg-indigo-200"
+                className="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg flex items-center hover:bg-indigo-200 transition-colors"
               >
-                <ImageIcon className="h-4 w-4 mr-1" />
+                <ImageIcon className="h-5 w-5 mr-2" />
                 Images
               </button>
               <button
                 onClick={handlePreview}
-                className="px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-md flex items-center hover:bg-emerald-200"
+                className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg flex items-center hover:bg-emerald-200 transition-colors"
               >
-                <Function className="h-4 w-4 mr-1" />
+                <Function className="h-5 w-5 mr-2" />
                 Preview
               </button>
             </div>
@@ -177,41 +177,45 @@ export function ManualEntryPage() {
             onChange={handleImageUpload}
           />
 
-          <div className="mb-3">
+          <div className="mb-6">
             <button
               onClick={() => setShowLatexHelper(!showLatexHelper)}
-              className="text-sm text-indigo-600 hover:text-indigo-800"
+              className="text-indigo-600 hover:text-indigo-800 font-medium"
             >
               {showLatexHelper ? 'Hide LaTeX Helper' : 'Show LaTeX Helper'}
             </button>
 
             {showLatexHelper && (
-              <div className="mt-2 p-3 bg-gray-50 rounded-md">
-                <h3 className="text-sm font-medium text-gray-700 mb-2">Common LaTeX Templates</h3>
-                <div className="grid grid-cols-2 gap-2">
+              <div className="mt-4 p-6 bg-gray-50 rounded-xl border border-gray-200">
+                <h3 className="text-lg font-medium text-gray-800 mb-4">LaTeX Templates</h3>
+                <div className="grid grid-cols-2 gap-4">
                   <button
                     onClick={() => insertLatexTemplate('\\frac{a}{b}')}
-                    className="text-left p-2 text-sm bg-white rounded border hover:bg-gray-50"
+                    className="text-left p-3 bg-white rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-sm transition-all"
                   >
-                    Fraction (a/b)
+                    <div className="font-medium text-gray-700">Fraction</div>
+                    <div className="text-sm text-gray-500">a/b</div>
                   </button>
                   <button
                     onClick={() => insertLatexTemplate('x^2 + y^2 = z^2')}
-                    className="text-left p-2 text-sm bg-white rounded border hover:bg-gray-50"
+                    className="text-left p-3 bg-white rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-sm transition-all"
                   >
-                    Pythagorean Theorem
+                    <div className="font-medium text-gray-700">Pythagorean</div>
+                    <div className="text-sm text-gray-500">x² + y² = z²</div>
                   </button>
                   <button
                     onClick={() => insertLatexTemplate('\\sqrt{x}')}
-                    className="text-left p-2 text-sm bg-white rounded border hover:bg-gray-50"
+                    className="text-left p-3 bg-white rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-sm transition-all"
                   >
-                    Square Root
+                    <div className="font-medium text-gray-700">Square Root</div>
+                    <div className="text-sm text-gray-500">√x</div>
                   </button>
                   <button
                     onClick={() => insertLatexTemplate('\\int_{a}^{b} f(x) dx')}
-                    className="text-left p-2 text-sm bg-white rounded border hover:bg-gray-50"
+                    className="text-left p-3 bg-white rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-sm transition-all"
                   >
-                    Definite Integral
+                    <div className="font-medium text-gray-700">Integral</div>
+                    <div className="text-sm text-gray-500">∫ f(x) dx</div>
                   </button>
                 </div>
               </div>
@@ -221,7 +225,7 @@ export function ManualEntryPage() {
           <textarea
             value={bulkText}
             onChange={(e) => setBulkText(e.target.value)}
-            className="w-full h-[calc(100vh-500px)] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm bg-gray-50"
+            className="w-full h-[600px] px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm bg-gray-50"
             placeholder={`Q1. Calculate the area: [latex: A = \\pi r^2]
 [image: circle.png]
 A. [latex: 12\\pi]
@@ -232,26 +236,26 @@ Answer: B`}
           />
 
           {error && (
-            <div className="mt-4 flex items-center bg-red-50 text-red-700 p-3 rounded">
+            <div className="mt-4 flex items-center bg-red-50 text-red-700 p-4 rounded-lg">
               <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />
               <p>{error}</p>
             </div>
           )}
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           {Object.keys(images).length > 0 && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">Uploaded Images</h3>
-              <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Uploaded Images</h3>
+              <div className="grid grid-cols-2 gap-6">
                 {Object.entries(images).map(([name, src]) => (
                   <div key={name} className="relative group">
                     <img
                       src={src}
                       alt={name}
-                      className="w-full h-40 object-cover rounded-lg border border-gray-200"
+                      className="w-full h-48 object-cover rounded-lg border border-gray-200"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-sm p-2 rounded-b-lg">
+                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-sm p-3 rounded-b-lg">
                       {name}
                     </div>
                   </div>
@@ -261,18 +265,18 @@ Answer: B`}
           )}
 
           {preview.length > 0 && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">Preview</h3>
-              <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h3 className="text-xl font-semibold text-gray-800 mb-6">Preview</h3>
+              <div className="space-y-8">
                 {preview.map((question, index) => (
-                  <div key={question.id} className="border-b border-gray-200 pb-4 last:border-0">
+                  <div key={question.id} className="border-b border-gray-200 pb-6 last:border-0">
                     <div className="flex items-start space-x-4">
                       <span className="font-medium text-gray-700">Q{index + 1}.</span>
                       <div className="flex-1">
                         <div className="text-gray-800">
                           {question.text}
                           {question.latex && (
-                            <div className="mt-2">
+                            <div className="mt-3">
                               <MathRenderer latex={question.latex} block />
                             </div>
                           )}
@@ -281,20 +285,20 @@ Answer: B`}
                           <img
                             src={question.imagePath}
                             alt={`Question ${index + 1}`}
-                            className="mt-2 max-h-48 rounded-lg border border-gray-200"
+                            className="mt-4 max-h-64 rounded-lg border border-gray-200"
                           />
                         )}
-                        <div className="mt-3 space-y-2">
+                        <div className="mt-4 space-y-3">
                           {question.options.map((option, optIndex) => (
                             <div
                               key={option.id}
-                              className={`flex items-center p-2 rounded ${
+                              className={`flex items-center p-3 rounded-lg ${
                                 optIndex === question.correctOptionIndex
-                                  ? 'bg-green-50'
-                                  : 'hover:bg-gray-50'
+                                  ? 'bg-green-50 border border-green-200'
+                                  : 'hover:bg-gray-50 border border-gray-200'
                               }`}
                             >
-                              <span className="w-6 font-medium text-gray-700">
+                              <span className="w-8 font-medium text-gray-700">
                                 {String.fromCharCode(65 + optIndex)}.
                               </span>
                               <div className="flex items-center">
@@ -316,22 +320,22 @@ Answer: B`}
         </div>
       </div>
 
-      <div className="mt-6 flex justify-end">
+      <div className="mt-8 flex justify-end">
         <button
           onClick={handleSubmit}
-          className="px-6 py-2.5 bg-indigo-600 text-white rounded-md flex items-center hover:bg-indigo-700"
+          className="px-8 py-3 bg-indigo-600 text-white rounded-lg flex items-center hover:bg-indigo-700 transition-colors"
         >
           <Save className="h-5 w-5 mr-2" />
           Save and Continue
         </button>
       </div>
 
-      <div className="mt-8 bg-amber-50 p-5 rounded-lg">
-        <h2 className="text-lg font-semibold text-amber-800 mb-2">Format Instructions</h2>
-        <p className="text-gray-700 mb-3">
+      <div className="mt-12 bg-amber-50 p-8 rounded-xl">
+        <h2 className="text-xl font-semibold text-amber-800 mb-4">Format Instructions</h2>
+        <p className="text-gray-700 mb-4">
           Use the following format to manually enter questions:
         </p>
-        <pre className="bg-white p-3 rounded border border-amber-200 text-sm overflow-x-auto">
+        <pre className="bg-white p-6 rounded-lg border border-amber-200 text-sm overflow-x-auto">
 {`Q1. Your question text here [latex: \\frac{x}{2} = 5]
 [image: filename.png]  (optional)
 A. First option [latex: x = 10]
@@ -340,13 +344,31 @@ C. Third option [latex: x = 8]
 D. Fourth option
 Answer: A`}
         </pre>
-        <ul className="mt-4 space-y-2 text-sm text-gray-600">
-          <li>• Start each question with "Q" and a number (e.g., Q1.)</li>
-          <li>• Include 4 options labeled A to D</li>
-          <li>• Use [latex: ...] for math equations</li>
-          <li>• Use [image: filename] to embed images</li>
-          <li>• Image files must be uploaded before referencing</li>
-          <li>• Correct answer should be stated with "Answer: X"</li>
+        <ul className="mt-6 space-y-3 text-gray-600">
+          <li className="flex items-center">
+            <span className="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Start each question with "Q" and a number (e.g., Q1.)
+          </li>
+          <li className="flex items-center">
+            <span className="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Include 4 options labeled A to D
+          </li>
+          <li className="flex items-center">
+            <span className="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Use [latex: ...] for math equations
+          </li>
+          <li className="flex items-center">
+            <span className="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Use [image: filename] to embed images
+          </li>
+          <li className="flex items-center">
+            <span className="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Image files must be uploaded before referencing
+          </li>
+          <li className="flex items-center">
+            <span className="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+            Correct answer should be stated with "Answer: X"
+          </li>
         </ul>
       </div>
     </div>
