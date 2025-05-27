@@ -14,6 +14,7 @@ export function ManualEntryPage() {
   const [images, setImages] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<Question[]>([]);
+  const [showLatexHelper, setShowLatexHelper] = useState(false);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -128,6 +129,10 @@ export function ManualEntryPage() {
     }
   };
 
+  const insertLatexTemplate = (template: string) => {
+    setBulkText(prev => prev + `[latex: ${template}]`);
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-8">
@@ -172,36 +177,51 @@ export function ManualEntryPage() {
             onChange={handleImageUpload}
           />
 
-          <div className="mb-3 flex flex-wrap gap-2 text-xs">
+          <div className="mb-3">
             <button
-              onClick={() => setBulkText(prev => prev + '\n[latex: \\frac{a}{b} = c]')}
-              className="bg-sky-100 text-sky-700 px-2 py-1 rounded hover:bg-sky-200"
+              onClick={() => setShowLatexHelper(!showLatexHelper)}
+              className="text-sm text-indigo-600 hover:text-indigo-800"
             >
-              Insert LaTeX
+              {showLatexHelper ? 'Hide LaTeX Helper' : 'Show LaTeX Helper'}
             </button>
-            <button
-              onClick={() => setBulkText(prev => prev + '\n[image: diagram.png]')}
-              className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded hover:bg-yellow-200"
-            >
-              Insert Image Ref
-            </button>
-            <button
-              onClick={() =>
-                setBulkText(prev =>
-                  prev +
-                  `\nQ1. Solve: [latex: 3x + 2 = 11]\nA. [latex: x = 3]\nB. [latex: x = 4]\nC. [latex: x = 5]\nD. [latex: x = 2]\nAnswer: A\n`
-                )
-              }
-              className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded hover:bg-emerald-200"
-            >
-              Insert Sample Question
-            </button>
+
+            {showLatexHelper && (
+              <div className="mt-2 p-3 bg-gray-50 rounded-md">
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Common LaTeX Templates</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => insertLatexTemplate('\\frac{a}{b}')}
+                    className="text-left p-2 text-sm bg-white rounded border hover:bg-gray-50"
+                  >
+                    Fraction (a/b)
+                  </button>
+                  <button
+                    onClick={() => insertLatexTemplate('x^2 + y^2 = z^2')}
+                    className="text-left p-2 text-sm bg-white rounded border hover:bg-gray-50"
+                  >
+                    Pythagorean Theorem
+                  </button>
+                  <button
+                    onClick={() => insertLatexTemplate('\\sqrt{x}')}
+                    className="text-left p-2 text-sm bg-white rounded border hover:bg-gray-50"
+                  >
+                    Square Root
+                  </button>
+                  <button
+                    onClick={() => insertLatexTemplate('\\int_{a}^{b} f(x) dx')}
+                    className="text-left p-2 text-sm bg-white rounded border hover:bg-gray-50"
+                  >
+                    Definite Integral
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <textarea
             value={bulkText}
             onChange={(e) => setBulkText(e.target.value)}
-            className="w-full h-[calc(100vh-400px)] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm bg-gray-50"
+            className="w-full h-[calc(100vh-500px)] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm bg-gray-50"
             placeholder={`Q1. Calculate the area: [latex: A = \\pi r^2]
 [image: circle.png]
 A. [latex: 12\\pi]
@@ -277,14 +297,12 @@ Answer: B`}
                               <span className="w-6 font-medium text-gray-700">
                                 {String.fromCharCode(65 + optIndex)}.
                               </span>
-                              <span className="flex-1">
-                                {option.text}
+                              <div className="flex items-center">
+                                <span>{option.text}</span>
                                 {option.latex && (
-                                  <span className="ml-2">
-                                    <MathRenderer latex={option.latex} />
-                                  </span>
+                                  <MathRenderer latex={option.latex} className="ml-2" />
                                 )}
-                              </span>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -333,4 +351,4 @@ Answer: A`}
       </div>
     </div>
   );
-} 
+}

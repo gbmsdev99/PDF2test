@@ -4,6 +4,7 @@ import { Clock, AlertCircle, CheckCircle, ChevronLeft, ChevronRight, ArrowRight 
 import { useTestStore } from '../store/testStore';
 import { Question, SecurityViolationType } from '../types';
 import { setupSecurityMonitoring, exitFullscreen } from '../utils/security';
+import { MathRenderer } from '../components/MathRenderer';
 
 export function TestPage() {
   const navigate = useNavigate();
@@ -20,42 +21,34 @@ export function TestPage() {
   const securityCleanupRef = useRef<(() => void) | null>(null);
   const violationsRef = useRef<number>(0);
   
-  // Handle questions based on settings
   const questions = useRef<Question[]>([]);
   
   useEffect(() => {
-    // Redirect if no active test
     if (!activeTest) {
       navigate('/');
       return;
     }
     
-    // Initialize questions (shuffle if needed)
     if (activeTest.settings.shuffleQuestions) {
-      // Create a shuffled copy of questions
       questions.current = [...activeTest.questions].sort(() => Math.random() - 0.5);
     } else {
       questions.current = [...activeTest.questions];
     }
     
-    // Initialize timer
     const durationMs = activeTest.settings.duration * 60 * 1000;
     setRemainingTime(durationMs);
     startTimeRef.current = Date.now();
     
-    // Start the timer
     timerRef.current = window.setInterval(() => {
       const elapsed = Date.now() - startTimeRef.current;
       const remaining = Math.max(0, durationMs - elapsed);
       setRemainingTime(remaining);
       
-      // Auto-submit when time runs out
       if (remaining <= 0) {
         handleSubmitTest();
       }
     }, 1000);
     
-    // Setup security monitoring
     securityCleanupRef.current = setupSecurityMonitoring({
       onViolation: (type) => {
         handleSecurityViolation(type);
@@ -65,7 +58,6 @@ export function TestPage() {
       enableCopyPasteCheck: true
     });
     
-    // Cleanup on unmount
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -75,10 +67,7 @@ export function TestPage() {
         securityCleanupRef.current();
       }
       
-      // Exit fullscreen if still active
-      exitFullscreen().catch(() => {
-        // Ignore errors when exiting fullscreen
-      });
+      exitFullscreen().catch(() => {});
     };
   }, [activeTest, navigate]);
   
@@ -86,11 +75,9 @@ export function TestPage() {
     violationsRef.current += 1;
     recordViolation();
     
-    // Show warning on first violation
     if (violationsRef.current === 1) {
       setShowWarning(true);
     } else {
-      // Auto-submit on second violation
       handleSubmitTest();
     }
   };
@@ -119,28 +106,20 @@ export function TestPage() {
     
     setSubmitting(true);
     
-    // Calculate time taken
     const timeTaken = Math.floor((Date.now() - startTimeRef.current) / 1000);
     
-    // Clear timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
     
-    // Clean up security monitoring
     if (securityCleanupRef.current) {
       securityCleanupRef.current();
     }
     
-    // Exit fullscreen
-    exitFullscreen().catch(() => {
-      // Ignore errors when exiting fullscreen
-    });
+    exitFullscreen().catch(() => {});
     
-    // Submit test
     const result = submitTest(selectedAnswers, timeTaken);
     
-    // Navigate to results page
     navigate('/submitted', { state: { resultId: result?.id } });
   };
   
@@ -148,7 +127,6 @@ export function TestPage() {
     setShowWarning(false);
   };
   
-  // Format remaining time
   const formatTime = (ms: number) => {
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -165,7 +143,6 @@ export function TestPage() {
   
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      {/* Timer and progress bar */}
       <div className="bg-white rounded-lg shadow-md p-4 mb-4 flex items-center justify-between">
         <div className="flex items-center">
           <Clock className="h-5 w-5 text-indigo-600 mr-2" />
@@ -182,7 +159,6 @@ export function TestPage() {
         </div>
       </div>
       
-      {/* Question and options */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-4">
         <div className="mb-4 flex justify-between items-center">
           <h2 className="text-lg font-semibold text-gray-800">
@@ -212,6 +188,18 @@ export function TestPage() {
         
         <div className="mb-6">
           <p className="text-gray-800 text-lg">{currentQuestion.text}</p>
+          {currentQuestion.latex && (
+            <MathRenderer latex={currentQuestion.latex} block className="mt-3" />
+          )}
+          {currentQuestion.imagePath && (
+            <div className="mt-4">
+              <img
+                src={currentQuestion.imagePath}
+                alt="Question diagram"
+                className="max-w-full max-h-96 object-contain rounded-lg border border-gray-200"
+              />
+            </div>
+          )}
         </div>
         
         <div className="space-y-3">
@@ -232,13 +220,17 @@ export function TestPage() {
               }`}>
                 {String.fromCharCode(65 + index)}
               </div>
-              <span>{option.text}</span>
+              <div className="flex items-center flex-1">
+                <span>{option.text}</span>
+                {option.latex && (
+                  <MathRenderer latex={option.latex} className="ml-2" />
+                )}
+              </div>
             </div>
           ))}
         </div>
       </div>
       
-      {/* Navigation and submit */}
       <div className="flex justify-between">
         {activeTest.settings.freeNavigation ? (
           <div className="flex space-x-3">
@@ -302,7 +294,6 @@ export function TestPage() {
         )}
       </div>
       
-      {/* Security warning modal */}
       {showWarning && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md">
