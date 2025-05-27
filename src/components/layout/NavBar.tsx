@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ClipboardCheck, BarChart } from 'lucide-react';
+import { ClipboardCheck, BarChart, Book } from 'lucide-react';
 
 export function NavBar() {
   const location = useLocation();
@@ -40,6 +40,17 @@ export function NavBar() {
             >
               <BarChart className="h-4 w-4 mr-1" />
               Results
+            </Link>
+            <Link
+              to="/manual"
+              className={`px-3 py-2 rounded-md text-sm font-medium flex items-center ${
+                location.pathname === '/manual' 
+                  ? 'bg-indigo-100 text-indigo-900' 
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <Book className="h-4 w-4 mr-1" />
+              Manual
             </Link>
           </nav>
         </div>

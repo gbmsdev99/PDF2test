@@ -11,12 +11,12 @@ import { InstructionsPage } from './pages/InstructionsPage';
 import { TestPage } from './pages/TestPage';
 import { SubmittedPage } from './pages/SubmittedPage';
 import { ResultsPage } from './pages/ResultsPage';
+import { UserManualPage } from './pages/UserManualPage';
 
 function App() {
   const { loadFromStorage } = useTestStore();
   
   useEffect(() => {
-    // Load saved data from localStorage
     loadFromStorage();
   }, [loadFromStorage]);
   
@@ -33,6 +33,7 @@ function App() {
           <Route path="instructions/:testId" element={<InstructionsPage />} />
           <Route path="submitted" element={<SubmittedPage />} />
           <Route path="results" element={<ResultsPage />} />
+          <Route path="manual" element={<UserManualPage />} />
         </Route>
         <Route path="test" element={<TestPage />} />
       </Routes>
