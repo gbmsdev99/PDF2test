@@ -12,6 +12,7 @@ import { TestPage } from './pages/TestPage';
 import { SubmittedPage } from './pages/SubmittedPage';
 import { ResultsPage } from './pages/ResultsPage';
 import { UserManualPage } from './pages/UserManualPage';
+import { FAQPage } from './pages/FAQPage';
 
 function App() {
   const { loadFromStorage } = useTestStore();
@@ -34,11 +35,10 @@ function App() {
           <Route path="submitted" element={<SubmittedPage />} />
           <Route path="results" element={<ResultsPage />} />
           <Route path="manual" element={<UserManualPage />} />
+          <Route path="faq" element={<FAQPage />} />
         </Route>
         <Route path="test" element={<TestPage />} />
       </Routes>
     </Router>
   );
 }
-
-export default App;

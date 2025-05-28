@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ClipboardCheck, BarChart, Book } from 'lucide-react';
+import { ClipboardCheck, BarChart, Book, HelpCircle } from 'lucide-react';
 
 export function NavBar() {
   const location = useLocation();
@@ -51,6 +51,17 @@ export function NavBar() {
             >
               <Book className="h-4 w-4 mr-1" />
               Manual
+            </Link>
+            <Link
+              to="/faq"
+              className={`px-3 py-2 rounded-md text-sm font-medium flex items-center ${
+                location.pathname === '/faq' 
+                  ? 'bg-indigo-100 text-indigo-900' 
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <HelpCircle className="h-4 w-4 mr-1" />
+              FAQ
             </Link>
           </nav>
         </div>
