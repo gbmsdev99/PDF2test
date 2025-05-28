@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Book, FileUp, Edit, Settings, Play, BarChart, Search, ChevronDown, ChevronRight } from 'lucide-react';
+import { 
+  Book, FileUp, Edit, Settings, Play, BarChart, Search, ChevronDown, ChevronRight,
+  ListChecks, FileQuestion, Clock, Users, Database, FileOutput, Tag, BarChart2
+} from 'lucide-react';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { QuestionType, DifficultyLevel } from '../types';
 
 export function UserManualPage() {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
@@ -84,164 +88,197 @@ export function UserManualPage() {
             </ul>
           </Section>
 
-          <Section id="pdf-format" title="PDF Format Requirements">
-            <p className="mb-4">
-              When uploading a PDF file, it must follow this specific format for questions:
-            </p>
-
-            <CodeExample code={`Q1. What is the capital of France?
+          <Section id="question-types" title="Question Types">
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium text-gray-800 mb-2">Multiple Choice</h3>
+                <CodeExample code={`Q1. What is the capital of France?
 A. Berlin
 B. Paris
 C. London
 D. Madrid
-Answer: B
-
-Q2. Calculate: [latex: 2x + 5 = 15]
-A. [latex: x = 5]
-B. [latex: x = 10]
-C. [latex: x = 8]
-D. [latex: x = 3]
-Answer: A`} />
-
-            <ul className="mt-4 space-y-2">
-              <li>• Each question starts with "Q" followed by a number and period</li>
-              <li>• Four options labeled A through D</li>
-              <li>• Correct answer indicated by "Answer: " followed by the option letter</li>
-              <li>• Optional LaTeX equations using [latex: ...] syntax</li>
-              <li>• Blank lines between questions for readability</li>
-            </ul>
-          </Section>
-
-          <Section id="latex-support" title="LaTeX Support">
-            <p className="mb-4">
-              The application supports LaTeX equations in both questions and answers. Here are some examples:
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Basic Math</h4>
-                <CodeExample code={`[latex: x^2 + y^2 = z^2]
-[latex: \\frac{a}{b} = c]
-[latex: \\sqrt{x + y}]`} />
+Answer: B`} />
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Advanced Math</h4>
-                <CodeExample code={`[latex: \\int_{0}^{\\infty} e^{-x^2} dx]
-[latex: \\sum_{n=1}^{\\infty} \\frac{1}{n^2}]
-[latex: \\lim_{x \\to 0} \\frac{\\sin x}{x}]`} />
+              <div>
+                <h3 className="text-lg font-medium text-gray-800 mb-2">True/False</h3>
+                <CodeExample code={`Q1. [TRUE_FALSE] The Earth is flat.
+Answer: False`} />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-800 mb-2">Fill in the Blank</h3>
+                <CodeExample code={`Q1. [FILL_IN_BLANK] The process of photosynthesis occurs in the [___] of plant cells.
+Answer: chloroplasts
+Alternatives: chloroplast, Chloroplasts`} />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-800 mb-2">Matching</h3>
+                <CodeExample code={`Q1. [MATCHING] Match the following:
+1. Oxygen | Essential for breathing
+2. Hydrogen | Lightest element
+3. Carbon | Basic building block of life
+4. Nitrogen | Main component of air`} />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-800 mb-2">Short Answer</h3>
+                <CodeExample code={`Q1. [SHORT_ANSWER] Explain the process of photosynthesis.
+Keywords: sunlight, chlorophyll, carbon dioxide, water, glucose, oxygen
+Model Answer: Photosynthesis is the process where plants use sunlight, chlorophyll, carbon dioxide, and water to produce glucose and oxygen.`} />
               </div>
             </div>
-
-            <p className="text-sm text-gray-600">
-              Note: LaTeX equations are rendered using KaTeX for optimal performance.
-            </p>
           </Section>
 
-          <Section id="image-support" title="Image Support">
-            <p className="mb-4">
-              You can include images in your questions using the following methods:
-            </p>
-
-            <h4 className="font-medium mb-2">Manual Entry</h4>
-            <ol className="space-y-2 mb-6">
-              <li>1. Click the "Images" button in the manual entry page</li>
-              <li>2. Select one or more image files</li>
-              <li>3. Reference images in questions using: [image: filename.png]</li>
-              <li>4. Images will be displayed above the question options</li>
-            </ol>
-
-            <div className="bg-amber-50 p-4 rounded-lg">
-              <p className="text-amber-800">
-                <strong>Important:</strong> Upload images before referencing them in questions.
-                Supported formats: PNG, JPG, JPEG, GIF
+          <Section id="sections-timers" title="Sections and Timers">
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Tests can be divided into sections, each with its own time limit and settings:
               </p>
-            </div>
-          </Section>
-
-          <Section id="security-features" title="Security Features">
-            <p className="mb-4">
-              The application includes several security features to maintain test integrity:
-            </p>
-
-            <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Fullscreen Mode</h4>
-                <ul className="space-y-1">
-                  <li>• Required during test taking</li>
-                  <li>• Exiting triggers a warning</li>
-                  <li>• Second violation auto-submits the test</li>
-                </ul>
-              </div>
 
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Tab Switching Prevention</h4>
-                <ul className="space-y-1">
-                  <li>• Switching tabs is detected</li>
-                  <li>• Counts as a security violation</li>
-                  <li>• Test integrity is maintained</li>
-                </ul>
-              </div>
-
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Copy/Paste Prevention</h4>
-                <ul className="space-y-1">
-                  <li>• Copying test content is disabled</li>
-                  <li>• Prevents sharing of questions</li>
-                  <li>• Maintains question confidentiality</li>
+                <h4 className="font-medium mb-2">Section Features</h4>
+                <ul className="space-y-2">
+                  <li className="flex items-center">
+                    <Clock className="h-4 w-4 text-indigo-600 mr-2" />
+                    Individual time limits per section
+                  </li>
+                  <li className="flex items-center">
+                    <ListChecks className="h-4 w-4 text-indigo-600 mr-2" />
+                    Group related questions together
+                  </li>
+                  <li className="flex items-center">
+                    <Settings className="h-4 w-4 text-indigo-600 mr-2" />
+                    Section-specific settings (shuffling, navigation)
+                  </li>
                 </ul>
               </div>
             </div>
           </Section>
 
-          <Section id="test-settings" title="Test Settings">
-            <p className="mb-4">
-              Customize your test with these settings:
-            </p>
-
+          <Section id="question-bank" title="Question Bank">
             <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Basic Settings</h4>
-                <ul className="space-y-1">
-                  <li>• Test title and description</li>
-                  <li>• Time limit (1-240 minutes)</li>
-                  <li>• Question shuffling</li>
-                </ul>
-              </div>
+              <p className="text-gray-700">
+                Save and organize frequently used questions in your personal question bank:
+              </p>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Navigation Options</h4>
-                <ul className="space-y-1">
-                  <li>• Free navigation between questions</li>
-                  <li>• Sequential navigation (one at a time)</li>
-                  <li>• Question review before submission</li>
-                </ul>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Organization</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <Tag className="h-4 w-4 text-indigo-600 mr-2" />
+                      Tag questions for easy filtering
+                    </li>
+                    <li className="flex items-center">
+                      <FileQuestion className="h-4 w-4 text-indigo-600 mr-2" />
+                      Set difficulty levels
+                    </li>
+                    <li className="flex items-center">
+                      <Database className="h-4 w-4 text-indigo-600 mr-2" />
+                      Create multiple question banks
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Collaboration</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <Users className="h-4 w-4 text-indigo-600 mr-2" />
+                      Share with other instructors
+                    </li>
+                    <li className="flex items-center">
+                      <Edit className="h-4 w-4 text-indigo-600 mr-2" />
+                      Collaborative editing
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </Section>
 
-          <Section id="results-analysis" title="Results & Analysis">
-            <p className="mb-4">
-              After test completion, you can:
-            </p>
-
+          <Section id="export-options" title="Export Options">
             <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">View Results</h4>
-                <ul className="space-y-1">
-                  <li>• Score and percentage</li>
-                  <li>• Time taken</li>
-                  <li>• Security violations</li>
-                </ul>
-              </div>
+              <p className="text-gray-700">
+                Export your tests in various formats:
+              </p>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Export Options</h4>
-                <ul className="space-y-1">
-                  <li>• Export results as CSV</li>
-                  <li>• Detailed analysis</li>
-                  <li>• Performance tracking</li>
-                </ul>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Document Formats</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <FileOutput className="h-4 w-4 text-indigo-600 mr-2" />
+                      PDF with customizable layout
+                    </li>
+                    <li className="flex items-center">
+                      <FileOutput className="h-4 w-4 text-indigo-600 mr-2" />
+                      Word document (DOCX)
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Platform Export</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <FileOutput className="h-4 w-4 text-indigo-600 mr-2" />
+                      Google Forms format
+                    </li>
+                    <li className="flex items-center">
+                      <FileOutput className="h-4 w-4 text-indigo-600 mr-2" />
+                      Moodle-compatible format
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </Section>
+
+          <Section id="analytics" title="Analytics & Tracking">
+            <div className="space-y-4">
+              <p className="text-gray-700">
+                Track and analyze test creation and performance:
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Question Analytics</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <BarChart2 className="h-4 w-4 text-indigo-600 mr-2" />
+                      Auto-generated vs. manual questions
+                    </li>
+                    <li className="flex items-center">
+                      <BarChart2 className="h-4 w-4 text-indigo-600 mr-2" />
+                      Question type distribution
+                    </li>
+                    <li className="flex items-center">
+                      <BarChart2 className="h-4 w-4 text-indigo-600 mr-2" />
+                      Difficulty level breakdown
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Performance Tracking</h4>
+                  <ul className="space-y-2">
+                    <li className="flex items-center">
+                      <BarChart2 className="h-4 w-4 text-indigo-600 mr-2" />
+                      Section-wise performance
+                    </li>
+                    <li className="flex items-center">
+                      <BarChart2 className="h-4 w-4 text-indigo-600 mr-2" />
+                      Time spent per section
+                    </li>
+                    <li className="flex items-center">
+                      <BarChart2 className="h-4 w-4 text-indigo-600 mr-2" />
+                      Question difficulty analysis
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </Section>
@@ -253,8 +290,10 @@ Answer: A`} />
             <div>
               <h3 className="font-medium text-gray-900">Need Help?</h3>
               <p className="text-gray-600 mt-1">
-                This manual covers the basic features. For additional help or to report issues,
-                please visit our support page.
+                This manual covers all features. For additional help, check out our FAQ section.
+              </p>
+              <p className="text-sm text-indigo-600 mt-2">
+                Developed by Aftab Alam | 1000001% FREE Forever!
               </p>
             </div>
           </div>
